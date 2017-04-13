@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Row from './Row';
 import Cell from './Cell';
+import Footer from './Footer';
 
 class Game extends Component {
     render() {
@@ -14,11 +15,12 @@ class Game extends Component {
         }
         return (
             <div className="grid">
-                {matrix.map((row, ri) => (
-                    <Row key={ri}>
+                {matrix.map((row, idx) => (
+                    <Row key={idx}>
                         {row.map(cellId => <Cell key={cellId} id={cellId} />)}
                     </Row>
                 ))}
+                <Footer {...this.state} />
             </div>
         );
     }
