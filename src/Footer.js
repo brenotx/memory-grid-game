@@ -5,10 +5,6 @@ class Footer extends Component {
         super(props);
         this.state = { gameState: 'ready'};
     }
-    componentDidMount() {
-        setTimeout(() => this.setState({ gameState: 'memorize'}), 2000);
-        setTimeout(() => this.setState({ gameState: 'recall'}), 4000);
-    }
     render() {
         return (
             <div className="footer">

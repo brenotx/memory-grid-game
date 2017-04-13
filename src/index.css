@@ -7,6 +7,7 @@ body {
 body {
    text-align: center;
 }
+
 .cell {
    width: 100px;
    height: 100px;
@@ -14,4 +15,8 @@ body {
    border: 1px solid #aaa;
    background: #f8f8f8;
    margin-right: 4px;
+}
+
+.active {
+ background-color: #058BDA;
 }
