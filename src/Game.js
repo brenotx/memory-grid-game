@@ -54,7 +54,8 @@ class Game extends Component {
                                                  {...this.state} />)}
                     </Row>
                 ))}
-                <Footer {...this.state} />
+                <Footer {...this.state}
+                        activeCellsCount={this.props.activeCellsCount} />
             </div>
         );
     }
