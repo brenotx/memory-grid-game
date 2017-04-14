@@ -22,7 +22,9 @@ class Game extends Component {
         this.activeCells = _.sampleSize(flatMatrix, this.props.activeCellsCount);
 
         this.state = {
-            gameState: 'ready'
+            gameState: 'ready',
+            wrongGuesses: [],
+            correctGuesses: []
         };
     }
     componentDidMount() {
@@ -32,6 +34,15 @@ class Game extends Component {
             });
         }, 2000);
     }
+    recordGuess({ cellId, userGuessIsCorrect}) {
+        let { wrongGuesses, correctGuesses } = this.state;
+        if (userGuessIsCorrect) {
+            correctGuesses.push(cellId);
+        } else {
+            wrongGuesses.push(cellId);
+        }
+        this.setState({ wrongGuesses, correctGuesses })
+    }
     render() {
         return (
             <div className="grid">
@@ -39,6 +50,7 @@ class Game extends Component {
                     <Row key={idx}>
                         {row.map(cellId => <Cell key={cellId} id={cellId}
                                                  activeCells={this.activeCells}
+                                                 recordGuess={this.recordGuess.bind(this)}
                                                  {...this.state} />)}
                     </Row>
                 ))}
