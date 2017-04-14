@@ -35,13 +35,19 @@ class Game extends Component {
         }, 2000);
     }
     recordGuess({ cellId, userGuessIsCorrect}) {
-        let { wrongGuesses, correctGuesses } = this.state;
+        let { wrongGuesses, correctGuesses, gameState } = this.state;
         if (userGuessIsCorrect) {
             correctGuesses.push(cellId);
+            if (correctGuesses.length === this.props.activeCellsCount) {
+                gameState = 'won';
+            }
         } else {
             wrongGuesses.push(cellId);
+            if (wrongGuesses.length > this.props.allowedWrongAttempts) {
+                gameState = 'lost';
+            }
         }
-        this.setState({ wrongGuesses, correctGuesses })
+        this.setState({ wrongGuesses, correctGuesses , gameState })
     }
     render() {
         return (
@@ -60,5 +66,9 @@ class Game extends Component {
         );
     }
 }
+
+Game.defaultProps = {
+    allowedWrongAttempts: 2
+};
 
 export default Game;
