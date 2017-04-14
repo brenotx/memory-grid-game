@@ -28,47 +28,71 @@ class Game extends Component {
         };
     }
     componentDidMount() {
-        setTimeout(() => {
+        this.memorizeTimerId = setTimeout(() => {
             this.setState({ gameState: 'memorize' }, () => {
-                setTimeout(() => this.setState({ gameState: 'recall' }), 2000);
+                this.recallTimerId = setTimeout(this.startRecallMode.bind(this), 2000);
             });
         }, 2000);
+    }
+    componentWillUnmount() {
+        clearTimeout(this.memorizeTimerId);
+        clearTimeout(this.recallTimerId);
+        this.finishGame();
+    }
+    startRecallMode() {
+        this.setState({ gameState: 'recall' }, () => {
+            this.secondsRemaining = this.props.timeoutSeconds;
+            setInterval(() => {
+                 if (--this.secondsRemaining === 0) {
+                     this.setState({ gameState: this.finishGame("lost") });
+                 }
+             }, 1000);
+         });
+    }
+    finishGame(gameState) {
+        clearInterval(this.playTimerId);
+        return gameState;
     }
     recordGuess({ cellId, userGuessIsCorrect}) {
         let { wrongGuesses, correctGuesses, gameState } = this.state;
         if (userGuessIsCorrect) {
             correctGuesses.push(cellId);
             if (correctGuesses.length === this.props.activeCellsCount) {
-                gameState = 'won';
+                gameState = this.finishGame("won");
             }
         } else {
             wrongGuesses.push(cellId);
             if (wrongGuesses.length > this.props.allowedWrongAttempts) {
-                gameState = 'lost';
+                gameState = this.finishGame("lost");
             }
         }
         this.setState({ wrongGuesses, correctGuesses , gameState })
     }
     render() {
+        let showActiveCells = ["memorize", "lost"].indexOf(this.state.gameState) >= 0;
         return (
             <div className="grid">
                 {this.matrix.map((row, idx) => (
                     <Row key={idx}>
                         {row.map(cellId => <Cell key={cellId} id={cellId}
+                                                 showActiveCells={showActiveCells}
                                                  activeCells={this.activeCells}
                                                  recordGuess={this.recordGuess.bind(this)}
                                                  {...this.state} />)}
                     </Row>
                 ))}
                 <Footer {...this.state}
+                        playAgain={this.props.createNewGame}
                         activeCellsCount={this.props.activeCellsCount} />
             </div>
         );
     }
 }
 
+// Game configs
 Game.defaultProps = {
-    allowedWrongAttempts: 2
+    allowedWrongAttempts: 2,
+    timeoutSeconds: 10
 };
 
 export default Game;

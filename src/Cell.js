@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Cell extends Component {
     /* A cell is active if its id is part of the activeCells
-    * array, and we only want the active cells to show up on the 
+    * array, and we only want the active cells to show up on the
     * grid during the “memorize” gameState.
     */
     active() {
@@ -24,12 +24,15 @@ class Cell extends Component {
             return false;
         }
     }
-    render () {
+    render() {
         let className = 'cell';
         if (this.props.gameState === 'memorize' && this.active()) {
             className += ' active';
         }
         if (this.guessState() !== undefined) className += ' guess-' + this.guessState();
+        if (this.props.showActiveCells && this.active()) {
+            className += ' active';
+        }
         return (
             <div className={className} onClick={this.handleClick.bind(this)}>
             </div>

@@ -9,6 +9,16 @@ class Footer extends Component {
             </div>
         );
     }
+    playAgainButton() {
+        if (["won", "lost"].indexOf(this.props.gameState) >= 0) {
+            return (
+                <button className="play-again-button"
+                onClick={this.props.playAgain}>
+                Play Again
+                </button>
+            );
+        }
+    }
     render() {
         return (
             <div className="footer">
@@ -16,6 +26,7 @@ class Footer extends Component {
                     {this.props.hints[this.props.gameState]}...
                 </div>
                 {this.remainingCount()}
+                {this.playAgainButton()}
             </div>
         );
     }
